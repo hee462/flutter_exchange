@@ -11,8 +11,6 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  List<DropdownMenuItem<String>> item = getAreas();
-
   @override
   void initState() {
     super.initState();
@@ -49,11 +47,8 @@ class _MainScreenState extends State<MainScreen> {
                   ),
                   SizedBox(
                     width: 220,
-                    child: DropdownButtonFormField(
-                      value: DropdownMenuItem<String>(
-                        value: viewModel.userDropButton.name,
-                        child: Text(viewModel.userDropButton.name),
-                      ),
+                    child: DropdownButtonFormField<String>(
+                      value: viewModel.userDropButton.name,
                       items: getAreas()
                           .map<DropdownMenuItem<String>>(
                             (e) => DropdownMenuItem(
@@ -112,18 +107,11 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
-  List<DropdownMenuItem<String>> getAreas() {
+  List<AreaSymbol> getAreas() {
     List<AreaSymbol> areaName = [];
     for (AreaSymbol symbol in AreaSymbol.values) {
       areaName.add(symbol);
     }
-    return areaName
-        .map<DropdownMenuItem<String>>(
-          (e) => DropdownMenuItem(
-            value: e.value,
-            child: Text(e.name),
-          ),
-        )
-        .toList();
+    return areaName;
   }
 }
