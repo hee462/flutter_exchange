@@ -1,5 +1,7 @@
 import 'package:exchange/data/enum/exchange_enum.dart';
+import 'package:exchange/presentation/exchange_veiw_model.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -10,7 +12,14 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   @override
+  void didChangeDependencies() async {
+    await context.read<ExchangeViewModel>().getExchange();
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final viewModel = context.watch<ExchangeViewModel>();
     return Scaffold(
       appBar: AppBar(
         title: Text('환율계산기'),
@@ -45,7 +54,9 @@ class _MainScreenState extends State<MainScreen> {
                             ),
                           )
                           .toList(),
-                      onChanged: (e) {},
+                      onChanged: (value) {
+                        setState(() {});
+                      },
                     ),
                   ),
                 ],
