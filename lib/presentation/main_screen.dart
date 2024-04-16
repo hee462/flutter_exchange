@@ -11,10 +11,14 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  List<DropdownMenuItem<String>> item = getAreas();
+
   @override
-  void didChangeDependencies() async {
-    await context.read<ExchangeViewModel>().getExchange();
-    super.didChangeDependencies();
+  void initState() {
+    super.initState();
+    Future.microtask(() {
+      context.read<ExchangeViewModel>().getExchange();
+    });
   }
 
   @override
@@ -46,6 +50,10 @@ class _MainScreenState extends State<MainScreen> {
                   SizedBox(
                     width: 220,
                     child: DropdownButtonFormField(
+                      value: DropdownMenuItem<String>(
+                        value: viewModel.userDropButton.name,
+                        child: Text(viewModel.userDropButton.name),
+                      ),
                       items: getAreas()
                           .map<DropdownMenuItem<String>>(
                             (e) => DropdownMenuItem(
@@ -77,20 +85,24 @@ class _MainScreenState extends State<MainScreen> {
                       ),
                     ),
                   ),
-                  SizedBox(
-                    width: 220,
-                    child: DropdownButtonFormField(
-                      items: getAreas()
-                          .map<DropdownMenuItem<String>>(
-                            (e) => DropdownMenuItem(
-                              value: e.value,
-                              child: Text(e.name),
-                            ),
-                          )
-                          .toList(),
-                      onChanged: (e) {},
-                    ),
-                  ),
+                  // SizedBox(
+                  //   width: 220,
+                  //   child: DropdownButtonFormField(
+                  //     value: 'sss',
+                  //     // value: DropdownMenuItem<String>(
+                  //     //     value: viewModel.culDropButton.value,
+                  //     //     child: Text(viewModel.culDropButton.name)),
+                  //     items: getAreas()
+                  //         .map<DropdownMenuItem<String>>(
+                  //           (e) => DropdownMenuItem(
+                  //             value: e.value,
+                  //             child: Text(e.name),
+                  //           ),
+                  //         )
+                  //         .toList(),
+                  //     onChanged: (e) {},
+                  //   ),
+                  // ),
                 ],
               ),
             ),
@@ -100,11 +112,18 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
-  List<AreaSymbol> getAreas() {
+  List<DropdownMenuItem<String>> getAreas() {
     List<AreaSymbol> areaName = [];
     for (AreaSymbol symbol in AreaSymbol.values) {
       areaName.add(symbol);
     }
-    return areaName;
+    return areaName
+        .map<DropdownMenuItem<String>>(
+          (e) => DropdownMenuItem(
+            value: e.value,
+            child: Text(e.name),
+          ),
+        )
+        .toList();
   }
 }
