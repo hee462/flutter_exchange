@@ -1,5 +1,7 @@
 import 'package:exchange/data/enum/exchange_enum.dart';
+import 'package:exchange/presentation/exchange_veiw_model.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -9,8 +11,19 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  List<DropdownMenuItem<String>> item = getAreas();
+
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() {
+      context.read<ExchangeViewModel>().getExchange();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    final viewModel = context.watch<ExchangeViewModel>();
     return Scaffold(
       appBar: AppBar(
         title: Text('환율계산기'),
@@ -37,6 +50,10 @@ class _MainScreenState extends State<MainScreen> {
                   SizedBox(
                     width: 220,
                     child: DropdownButtonFormField(
+                      value: DropdownMenuItem<String>(
+                        value: viewModel.userDropButton.name,
+                        child: Text(viewModel.userDropButton.name),
+                      ),
                       items: getAreas()
                           .map<DropdownMenuItem<String>>(
                             (e) => DropdownMenuItem(
@@ -45,7 +62,9 @@ class _MainScreenState extends State<MainScreen> {
                             ),
                           )
                           .toList(),
-                      onChanged: (e) {},
+                      onChanged: (value) {
+                        setState(() {});
+                      },
                     ),
                   ),
                 ],
@@ -66,20 +85,24 @@ class _MainScreenState extends State<MainScreen> {
                       ),
                     ),
                   ),
-                  SizedBox(
-                    width: 220,
-                    child: DropdownButtonFormField(
-                      items: getAreas()
-                          .map<DropdownMenuItem<String>>(
-                            (e) => DropdownMenuItem(
-                              value: e.value,
-                              child: Text(e.name),
-                            ),
-                          )
-                          .toList(),
-                      onChanged: (e) {},
-                    ),
-                  ),
+                  // SizedBox(
+                  //   width: 220,
+                  //   child: DropdownButtonFormField(
+                  //     value: 'sss',
+                  //     // value: DropdownMenuItem<String>(
+                  //     //     value: viewModel.culDropButton.value,
+                  //     //     child: Text(viewModel.culDropButton.name)),
+                  //     items: getAreas()
+                  //         .map<DropdownMenuItem<String>>(
+                  //           (e) => DropdownMenuItem(
+                  //             value: e.value,
+                  //             child: Text(e.name),
+                  //           ),
+                  //         )
+                  //         .toList(),
+                  //     onChanged: (e) {},
+                  //   ),
+                  // ),
                 ],
               ),
             ),
@@ -89,11 +112,18 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
-  List<AreaSymbol> getAreas() {
+  List<DropdownMenuItem<String>> getAreas() {
     List<AreaSymbol> areaName = [];
     for (AreaSymbol symbol in AreaSymbol.values) {
       areaName.add(symbol);
     }
-    return areaName;
+    return areaName
+        .map<DropdownMenuItem<String>>(
+          (e) => DropdownMenuItem(
+            value: e.value,
+            child: Text(e.name),
+          ),
+        )
+        .toList();
   }
 }

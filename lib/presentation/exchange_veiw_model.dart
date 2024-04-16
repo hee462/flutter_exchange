@@ -16,7 +16,7 @@ class ExchangeViewModel with ChangeNotifier {
     required ExchangeRepository repository,
   }) : _repository = repository;
 
-  Future<void> getExchange(AreaSymbol? symbol) async {
+  Future<void> getExchange({AreaSymbol? symbol}) async {
     // userDropButton 에 기본값 설정
     userDropButton = symbol ?? userDropButton;
     exchange = await _repository.getInfo(userDropButton.value);
