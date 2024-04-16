@@ -1,4 +1,4 @@
-import 'package:exchange/data/exchange_enum.dart';
+import 'package:exchange/data/enum/exchange_enum.dart';
 import 'package:flutter/material.dart';
 
 class MainScreen extends StatefulWidget {
