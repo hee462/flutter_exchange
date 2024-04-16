@@ -13,7 +13,16 @@ extension ToExchange on ExchangeResultDto {
       //conversionRates 있으면 as Map<String,num>
       //conversionRates null 하면 {}
       //.toJson() 하는 이유 map 형태로 담아서 데이터 사용하려고
-      conversionRates: conversionRates?.toJson() as Map<String, num> ?? {},
+      conversionRates:
+          _toMap(conversionRates?.toJson() ?? {}) as Map<String, num>,
     );
+  }
+
+  Map<String, num> _toMap(Map<String, dynamic> map) {
+    Map<String, num> result = {};
+    map.forEach((key, value) {
+      result[key] = value;
+    });
+    return result;
   }
 }

@@ -359,7 +359,7 @@ class ConversionRatesDto {
     tmt = json['TMT'];
     tnd = json['TND'];
     top = json['TOP'];
-    turkey = json['try'];
+    turkey = json['TRY'];
     ttd = json['TTD'];
     tvd = json['TVD'];
     twd = json['TWD'];
@@ -713,5 +713,3 @@ class ConversionRatesDto {
     return map;
   }
 }
-
-
