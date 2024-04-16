@@ -20,6 +20,7 @@ class ExchangeViewModel with ChangeNotifier {
     // userDropButton 에 기본값 설정
     userDropButton = symbol ?? userDropButton;
     exchange = await _repository.getInfo(userDropButton.value);
+    // print(exchange);
     // 안쓰는 상태에서 값 확인해보기
     notifyListeners();
   }
