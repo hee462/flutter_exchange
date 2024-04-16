@@ -1,6 +1,5 @@
 import 'package:exchange/data/enum/exchange_enum.dart';
 import 'package:exchange/presentation/exchange_veiw_model.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -16,10 +15,17 @@ class _MainScreenState extends State<MainScreen> {
   final _textEditingCulController = TextEditingController();
 
   @override
-  void didChangeDependencies() {
-    context.read<ExchangeViewModel>().getExchange();
-    super.didChangeDependencies();
+  void initState() {
+    super.initState();
+    Future.microtask(() {
+      context.read<ExchangeViewModel>().getExchange();
+    });
   }
+  // @override
+  // void didChangeDependencies() async {
+  //   await context.read<ExchangeViewModel>().getExchange();
+  //   super.didChangeDependencies();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -42,11 +48,12 @@ class _MainScreenState extends State<MainScreen> {
                     height: 50,
                     child: TextField(
                       onChanged: (e) {
-                      if( inputText(e)== null){
-                        viewModel.userCalculateExchange(double.parse(e));
-                        _textEditingCulController.text = viewModel.culExchangeValue.toString();
-                      }
-
+                        if (inputText(e) == null) {
+                          viewModel.userCalculateExchange(double.parse(e));
+                          _textEditingCulController.text =
+                              ((viewModel.culExchangeValue * 100).round() / 100)
+                                  .toString();
+                        }
                       },
                       controller: _textEditingUserController,
                       keyboardType: TextInputType.number,
@@ -70,6 +77,8 @@ class _MainScreenState extends State<MainScreen> {
                           .toList(),
                       onChanged: (value) {
                         viewModel.getExchange(symbol: value);
+                        _textEditingUserController.text = '0';
+                        _textEditingCulController.text = '0';
                       },
                     ),
                   ),
@@ -86,7 +95,13 @@ class _MainScreenState extends State<MainScreen> {
                     height: 50,
                     child: TextField(
                       onChanged: (e) {
-                        // userCalculateExchange()
+                        if (inputText(e) == null) {
+                          viewModel.calculateExchange(double.parse(e));
+                          _textEditingUserController.text =
+                              ((viewModel.userExchangeValue * 100).round() /
+                                      100)
+                                  .toString();
+                        }
                       },
                       controller: _textEditingCulController,
                       keyboardType: TextInputType.number,
@@ -110,6 +125,8 @@ class _MainScreenState extends State<MainScreen> {
                           .toList(),
                       onChanged: (e) {
                         viewModel.culExchange(e);
+                        _textEditingUserController.text = '0';
+                        _textEditingCulController.text = '0';
                       },
                     ),
                   ),

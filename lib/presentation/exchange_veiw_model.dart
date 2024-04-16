@@ -20,7 +20,7 @@ class ExchangeViewModel with ChangeNotifier {
     // userDropButton 에 기본값 설정
     userDropButton = symbol ?? userDropButton;
     exchange = await _repository.getInfo(userDropButton.value);
-    // print(exchange);
+    print("exchange1:$exchange");
     // 안쓰는 상태에서 값 확인해보기
     notifyListeners();
   }
@@ -31,15 +31,16 @@ class ExchangeViewModel with ChangeNotifier {
 
   void calculateExchange(num money) {
     culExchangeValue = money;
-    userExchangeValue =
-        culExchangeValue * exchange!.conversionRates[culDropButton.value]!;
+    userExchangeValue = culExchangeValue /
+        (exchange?.conversionRates[culDropButton.value] ?? 0);
     notifyListeners();
   }
 
   void userCalculateExchange(num money) {
     userExchangeValue = money;
-    culExchangeValue =
-        userExchangeValue / exchange!.conversionRates[culDropButton.value]!;
+    print("exchange: $exchange");
+    culExchangeValue = userExchangeValue *
+        (exchange?.conversionRates[culDropButton.value] ?? 0);
     notifyListeners();
   }
 }
